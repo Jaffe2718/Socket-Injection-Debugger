@@ -105,14 +105,14 @@ public abstract class TempDatapackManager {
             }
             StringBuilder sb = new StringBuilder("{");
             sb.append("\"enabled\": [");
-            for (String datapackName : server.getDataPackManager().getEnabledNames()) {
+            for (String datapackName : server.getDataPackManager().getEnabledIds()) {
                 sb.append("\"").append(datapackName).append("\",");
             }
             if (sb.charAt(sb.length() - 1) == ',') {
                 sb.deleteCharAt(sb.length() - 1);
             }
             sb.append("], \"all\": [");
-            for (String datapackName : server.getDataPackManager().getNames()) {
+            for (String datapackName : server.getDataPackManager().getIds()) {
                 sb.append("\"").append(datapackName).append("\",");
             }
             if (sb.charAt(sb.length() - 1) == ',') {
@@ -154,7 +154,7 @@ public abstract class TempDatapackManager {
     public static void delateTempDatapacks(MinecraftServer server, ServerWorld ignore) {
         for (Path datapackPath : temporaryLinkedDatapacks) {
             String datapackName = "\"file/"+ datapackPath.getFileName() + "\"";
-            if (server.getDataPackManager().getEnabledNames().contains(datapackName)) {
+            if (server.getDataPackManager().getEnabledIds().contains(datapackName)) {
                 Objects.requireNonNull(MinecraftClient.getInstance().getNetworkHandler()).sendChatCommand("datapack disable " + datapackName);
             }
         }
