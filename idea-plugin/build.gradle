@@ -2,7 +2,7 @@
 plugins {
     id "java"
     // id "org.jetbrains.kotlin:kotlin-gradle-plugin" version '1.9.21'
-    id "org.jetbrains.intellij" version "1.16.1"
+    id "org.jetbrains.intellij" version "1.17.4"
 }
 
 group = 'me.jaffe2718'
@@ -43,7 +43,7 @@ tasks {
 
     patchPluginXml {
         sinceBuild = '233.0'
-        untilBuild = '233.*'
+        untilBuild = '241.*'
     }
 
     signPlugin {
