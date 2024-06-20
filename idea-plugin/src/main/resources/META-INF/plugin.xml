@@ -2,7 +2,7 @@
     <id>me.jaffe2718.devkit</id>
 
     <name>Minecraft Command DevKit</name>
-    <version>1.3.2</version>
+    <version>1.3.3</version>
     <vendor email="qqyttwqeei@163.com" url="https://github.com/Jaffe2718">Jaffe2718</vendor>
     <description>
         <![CDATA[
@@ -65,7 +65,7 @@
                 <body>
                     <h2>Changelog</h2>
                     <ol>
-                        <li>IDEA 233.x support</li>
+                        <li>IDEA 241.x support</li>
                     </ol>
                 </body>
             </html>
