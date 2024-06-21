@@ -4,6 +4,8 @@ import me.jaffe2718.cmdkit.CommandDebugDevKit;
 import me.jaffe2718.cmdkit.client.CommandDebugDevKitClient;
 import me.jaffe2718.cmdkit.mixins.ChatScreenMixin;
 import me.jaffe2718.cmdkit.unit.TempDatapackManager;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
@@ -15,6 +17,7 @@ import net.minecraft.text.*;
 import net.minecraft.util.math.ColorHelper;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.net.Socket;
@@ -24,13 +27,16 @@ import java.util.List;
 public abstract class EventHandler {
 
     /**
-     * The command {@link ChatInputSuggestor suggetor}
+     * The command {@link ChatInputSuggestor suggetor}, used to get the command suggestions.
+     * It will be null on the server side.
      */
-    public static ChatInputSuggestor suggestor = null;
+    @Environment(EnvType.CLIENT)
+    public static @Nullable ChatInputSuggestor suggestor = null;
 
     /**
      * The last command that the player input in the chat screen.
      */
+    @Environment(EnvType.CLIENT)
     public static volatile String lastInput = "";
 
     /**
@@ -117,7 +123,7 @@ public abstract class EventHandler {
         checkClientSocketThread.start();
         TempDatapackManager.datapackManagementSocketThread.start();
         ClientTickEvents.START_CLIENT_TICK.register(EventHandler::getSuggestor);
-        ClientTickEvents.END_CLIENT_TICK.register(EventHandler::showWarning);
+        ClientTickEvents.END_CLIENT_TICK.register(EventHandler::showSocketInfo);
         ClientReceiveMessageEvents.GAME.register(EventHandler::sendLogToClientSocket);
         ServerWorldEvents.UNLOAD.register(TempDatapackManager::delateTempDatapacks);
     }
@@ -163,6 +169,7 @@ public abstract class EventHandler {
      * Gets the {@link ChatInputSuggestor EventHandler.suggestor} by using a Render-Thread
      * @param client The Minecraft client.
      */
+    @Environment(EnvType.CLIENT)
     private static void getSuggestor(@NotNull MinecraftClient client) {
         if (client.player != null && !lastInput.isEmpty()) {
             ChatScreen chatScreen = new ChatScreen("");
@@ -202,7 +209,7 @@ public abstract class EventHandler {
      * Shows the client socket info and warning when the player joins a world.
      * @param client The Minecraft client.
      */
-    private static void showWarning(@NotNull MinecraftClient client) {
+    private static void showSocketInfo(@NotNull MinecraftClient client) {
         if (client.player == null) {
             shown = false;
         } else if (!shown) {
@@ -225,7 +232,7 @@ public abstract class EventHandler {
             client.player.sendMessage(Text.translatable("message.cmdkit.service.datapackManagement"));
             client.player.sendMessage(clickToCopy(
                     2,
-                    String.format("%s:%d", CommandDebugDevKit.ipv4, CommandDebugDevKit.receiveDatapackSocket.getLocalPort()),
+                    String.format("%s:%d", CommandDebugDevKit.ipv4, CommandDebugDevKit.manageDatapackSocket.getLocalPort()),
                     ColorHelper.Argb.getArgb(85, 255, 255)
             ));
 

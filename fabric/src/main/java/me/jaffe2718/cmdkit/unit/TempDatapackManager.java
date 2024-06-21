@@ -199,7 +199,7 @@ public abstract class TempDatapackManager {
     public static final Thread datapackManagementSocketThread = new Thread(() -> {
         while (true) {
             try {
-                Socket clientSocket = CommandDebugDevKit.receiveDatapackSocket.accept();
+                Socket clientSocket = CommandDebugDevKit.manageDatapackSocket.accept();
                 CommandDebugDevKit.LOGGER.info("Client socket accepted on localhost:{}", clientSocket.getLocalPort());
                 BufferedReader br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 String jsonStr = br.readLine();

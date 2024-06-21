@@ -35,7 +35,7 @@ public class CommandDebugDevKit implements ModInitializer {
     /**
      * The server socket used to receive datapack files.
      * */
-    public static ServerSocket receiveDatapackSocket = null;
+    public static ServerSocket manageDatapackSocket = null;
 
     /**
      * Runs the mod initializer.
@@ -46,7 +46,7 @@ public class CommandDebugDevKit implements ModInitializer {
         try {
             executeCmdSocket = new ServerSocket(0);
             suggestCmdSocket = new ServerSocket(0);
-            receiveDatapackSocket = new ServerSocket(0);
+            manageDatapackSocket = new ServerSocket(0);
             // Get the local IP address
             Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
             while (networkInterfaces.hasMoreElements()) {
