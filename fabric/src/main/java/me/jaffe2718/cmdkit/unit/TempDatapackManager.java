@@ -15,6 +15,7 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.file.*;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static java.nio.file.Files.walk;
 
@@ -75,9 +76,15 @@ public abstract class TempDatapackManager {
                     Objects.requireNonNull(MinecraftClient.getInstance().getNetworkHandler()).sendChatCommand("datapack disable " + "\"file/" + name + "\"");
                     Thread.sleep(10);
                     if (datapackPath.toFile().isDirectory()) {
-                        walk(datapackPath)
-                                .sorted(Comparator.reverseOrder())
-                                .forEach(path -> {try {Files.delete(path);} catch (Exception ignored) {}});
+                        try (Stream<Path> walk = walk(datapackPath)) {
+                            walk.sorted(Comparator.reverseOrder())
+                                    .forEach(path -> {
+                                        try {
+                                            Files.delete(path);
+                                        } catch (Exception ignored) {
+                                        }
+                                    });
+                        }
                     } else if (datapackPath.toFile().isFile()) {
                         Files.delete(datapackPath);
                     }
@@ -175,7 +182,7 @@ public abstract class TempDatapackManager {
         while (true) {
             try {
                 Socket clientSocket = CommandDebugDevKit.receiveDatapackSocket.accept();
-                CommandDebugDevKit.LOGGER.info("Client socket accepted on localhost:" + clientSocket.getLocalPort());
+                CommandDebugDevKit.LOGGER.info("Client socket accepted on localhost:{}", clientSocket.getLocalPort());
                 BufferedReader br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 String jsonStr = br.readLine();
                 // parse the json
@@ -195,7 +202,7 @@ public abstract class TempDatapackManager {
                 }
                 clientSocket.close();
             } catch (Exception e) {
-                CommandDebugDevKit.LOGGER.info(e.getClass() + " " + e.getMessage());
+                CommandDebugDevKit.LOGGER.info("{} {}", e.getClass(), e.getMessage());
             }
         }
     });

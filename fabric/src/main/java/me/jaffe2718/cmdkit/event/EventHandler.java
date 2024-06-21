@@ -53,9 +53,9 @@ public abstract class EventHandler {
                 Socket clientSocket = CommandDebugDevKit.executeCmdSocket.accept();
                 clientExecuteSockets.add(clientSocket);
                 buildClientSocketThread(clientSocket, true).start();
-                CommandDebugDevKit.LOGGER.info("Client socket accepted on localhost:" + clientSocket.getLocalPort());
+                CommandDebugDevKit.LOGGER.info("Client socket accepted on localhost: {}", clientSocket.getLocalPort());
             } catch (IOException e) {
-                CommandDebugDevKit.LOGGER.error("Failed to accept client socket: " + e.getMessage());
+                CommandDebugDevKit.LOGGER.error("Failed to accept client socket: {}", e.getMessage());
             }
         }
     });
@@ -76,9 +76,9 @@ public abstract class EventHandler {
                 Socket clientSocket = CommandDebugDevKit.suggestCmdSocket.accept();
                 clientSuggestSockets.add(clientSocket);
                 buildClientSocketThread(clientSocket, false).start();
-                CommandDebugDevKit.LOGGER.info("Client socket accepted on localhost:" + clientSocket.getLocalPort());
+                CommandDebugDevKit.LOGGER.info("Client socket accepted on localhost: {}", clientSocket.getLocalPort());
             } catch (IOException e) {
-                CommandDebugDevKit.LOGGER.error("Failed to accept client socket: " + e.getMessage());
+                CommandDebugDevKit.LOGGER.error("Failed to accept client socket: {}", e.getMessage());
             }
         }
     });
@@ -165,16 +165,17 @@ public abstract class EventHandler {
     private static void getSuggestor(@NotNull MinecraftClient client) {
         if (client.player != null && !lastInput.isEmpty()) {
             ChatScreen chatScreen = new ChatScreen("");
+            ChatScreenMixin chatScreenMixin = (ChatScreenMixin) chatScreen;
             Screen currentScreen = client.currentScreen;
             client.setScreen(chatScreen);
-            suggestor = ((ChatScreenMixin) chatScreen).getChatInputSuggestor();
+            suggestor = chatScreenMixin.getChatInputSuggestor();
             suggestor.refresh();
             if (!lastInput.startsWith("/")) {
-                ((ChatScreenMixin) chatScreen).getChatField().write("/"); // + lastCommand);
+                chatScreenMixin.getChatField().write("/"); // + lastCommand);
             }
             // tap the command to the chat field one by one
             for (int i = 0; i < lastInput.length(); i++) {
-                ((ChatScreenMixin) chatScreen).getChatField().write(String.valueOf(lastInput.charAt(i)));
+                chatScreenMixin.getChatField().write(String.valueOf(lastInput.charAt(i)));
             }
             lastInput = "";                                  // clear the lastCommand
             client.setScreen(currentScreen);                   // switch back to the screen before
