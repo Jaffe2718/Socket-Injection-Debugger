@@ -11,7 +11,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatInputSuggestor;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.Text;
+import net.minecraft.text.*;
+import net.minecraft.util.math.ColorHelper;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -205,19 +206,50 @@ public abstract class EventHandler {
         if (client.player == null) {
             shown = false;
         } else if (!shown) {
-            client.player.sendMessage(Text.of("§a§l[Command Debug Service] §r§aThe Socket Server is running"), false);
+            client.player.sendMessage(Text.translatable("message.cmdkit.run"));
 
-            client.player.sendMessage(Text.of("§6For Command Execution Service"), false);
-            client.player.sendMessage(Text.of("  §6localhost:" + CommandDebugDevKit.executeCmdSocket.getLocalPort()), false);
-            // purple
-            client.player.sendMessage(Text.of("§dFor Command Suggestion Service"), false);
-            client.player.sendMessage(Text.of("  §dlocalhost:" + CommandDebugDevKit.suggestCmdSocket.getLocalPort()), false);
+            client.player.sendMessage(Text.translatable("message.cmdkit.service.execution"));
+            client.player.sendMessage(clickToCopy(
+                    2,
+                    String.format("%s:%d", CommandDebugDevKit.ipv4, CommandDebugDevKit.executeCmdSocket.getLocalPort()),
+                    ColorHelper.Argb.getArgb(255, 170, 0)
+            ));
 
-            client.player.sendMessage(Text.of("§bFor Datapack Management Service"), false);
-            client.player.sendMessage(Text.of("  §blocalhost:" + CommandDebugDevKit.receiveDatapackSocket.getLocalPort()), false);
+            client.player.sendMessage(Text.translatable("message.cmdkit.service.suggestion"));
+            client.player.sendMessage(clickToCopy(
+                    2,
+                    String.format("%s:%d", CommandDebugDevKit.ipv4, CommandDebugDevKit.suggestCmdSocket.getLocalPort()),
+                    ColorHelper.Argb.getArgb(255, 85, 255)
+            ));
 
-            client.player.sendMessage(Text.of("§c§lWARNING: §r§cDo not share this host and port with untrusted clients!"), false);
+            client.player.sendMessage(Text.translatable("message.cmdkit.service.datapackManagement"));
+            client.player.sendMessage(clickToCopy(
+                    2,
+                    String.format("%s:%d", CommandDebugDevKit.ipv4, CommandDebugDevKit.receiveDatapackSocket.getLocalPort()),
+                    ColorHelper.Argb.getArgb(85, 255, 255)
+            ));
+
+            client.player.sendMessage(Text.translatable("message.cmdkit.warining"));
             shown = true;
         }
+    }
+
+    /**
+     * Creates a clickable text, click to copy the text.
+     * @param tab The tab count.
+     * @param text The text.
+     * @param color The color, use {@link ColorHelper.Argb#getArgb(int, int, int)} to get the color.
+     * @return The clickable text.
+     */
+    private static Text clickToCopy(int tab, String text, int color) {
+        String tabStr = "  ".repeat(tab);
+        return Text.literal(tabStr).append(
+                Text.literal(text)
+                        .setStyle(
+                                Style.EMPTY.withUnderline(true).withClickEvent(
+                                        new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, text)
+                                ).withColor(color)
+                        )
+        );
     }
 }

@@ -1,0 +1,13 @@
+{
+    "message.cmdkit.run": "§a§l[Command Debug Service] §r§aSocket服务器正在运行",
+    "message.cmdkit.service.execution": "§6对于命令执行服务",
+    "message.cmdkit.service.suggestion": "§d对于命令建议服务",
+    "message.cmdkit.service.datapackManagement": "§b对于数据包管理服务",
+    "message.cmdkit.word.Datapack": "数据包 ",
+    "message.cmdkit.word.is": "",
+    "message.cmdkit.word.deleted": "已删除",
+    "message.cmdkit.word.imported": "已导入",
+    "message.cmdkit.word.linked": "已链接",
+    "message.cmdkit.word.unlinked": "已取消链接",
+    "message.cmdkit.warining": "§c§l警告: §r§c不要与不受信任的客户端共享此主机和端口!"
+}

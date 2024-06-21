@@ -43,7 +43,16 @@ public abstract class TempDatapackManager {
             }
             Objects.requireNonNull(MinecraftClient.getInstance().getNetworkHandler()).sendChatCommand("datapack enable " + "\"file/" + name + "\"");
             Objects.requireNonNull(MinecraftClient.getInstance().getNetworkHandler()).sendChatCommand("reload");
-            Objects.requireNonNull(MinecraftClient.getInstance().player).sendMessage(Text.of("Datapack `" + name + "` is " + (isImport ? "imported" : "linked") + "!"));
+            // Objects.requireNonNull(MinecraftClient.getInstance().player).sendMessage(Text.of("Datapack `" + name + "` is " + (isImport ? "imported" : "linked") + "!"));
+            Objects.requireNonNull(MinecraftClient.getInstance().player).sendMessage(
+                    Text.translatable("message.cmdkit.word.Datapack")
+                            .append("`")
+                            .append(name)
+                            .append("` ")
+                            .append(Text.translatable("message.cmdkit.word.is"))
+                            .append(Text.translatable("message.cmdkit.word." + (isImport ? "imported" : "linked")))
+                            .append("!")
+            );
         } catch (Exception e) {
             throw new RuntimeException("Fail to " + (isImport ? "import" : "link") + " datapack: " + e.getClass() + " "+ e.getMessage());
         }
@@ -90,7 +99,16 @@ public abstract class TempDatapackManager {
                     }
                     // Files.delete(datapackPath);  // may be DirectoryNotEmptyException
                     Objects.requireNonNull(MinecraftClient.getInstance().getNetworkHandler()).sendChatCommand("reload");
-                    Objects.requireNonNull(MinecraftClient.getInstance().player).sendMessage(Text.of("Datapack `" + name + "` is " + (isDelete ? "deleted" : "unlinked") + "!"));
+                    // Objects.requireNonNull(MinecraftClient.getInstance().player).sendMessage(Text.of("Datapack `" + name + "` is " + (isDelete ? "deleted" : "unlinked") + "!"));
+                    Objects.requireNonNull(MinecraftClient.getInstance().player).sendMessage(
+                            Text.translatable("message.cmdkit.word.Datapack")             // `Datapack `
+                                    .append("`")
+                                    .append(name)
+                                    .append("` ")
+                                    .append(Text.translatable("message.cmdkit.word.is"))  // `is `
+                                    .append(Text.translatable("message.cmdkit.word." + (isDelete ? "deleted" : "unlinked")))
+                                    .append("!")
+                    );
                 } else {
                     throw new RuntimeException("Datapack `" + name + "` does not exist!");
                 }

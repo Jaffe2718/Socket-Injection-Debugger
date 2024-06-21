@@ -1,0 +1,13 @@
+{
+    "message.cmdkit.run": "§a§l[Command Debug Service] §r§aThe Socket Server is running",
+    "message.cmdkit.service.execution": "§6For Command Execution Service",
+    "message.cmdkit.service.suggestion": "§dFor Command Suggestion Service",
+    "message.cmdkit.service.datapackManagement": "§bFor Datapack Management Service",
+    "message.cmdkit.word.Datapack": "Datapack ",
+    "message.cmdkit.word.is": "is ",
+    "message.cmdkit.word.deleted": "deleted",
+    "message.cmdkit.word.imported": "imported",
+    "message.cmdkit.word.linked": "linked",
+    "message.cmdkit.word.unlinked": "unlinked",
+    "message.cmdkit.warining": "§c§lWARNING: §r§cDo not share this host and port with untrusted clients!"
+}
